@@ -645,7 +645,7 @@ class ServiceGenerator {
         schema = this.config.dataFields.map(field => childrenSchema.properties[field]).filter(Boolean)?.[0] || resContent[mediaType].schema || DEFAULT_SCHEMA;
       }
     }
-    
+
     if ('properties' in schema) {
       Object.keys(schema.properties).map((fieldName) => {
         // eslint-disable-next-line @typescript-eslint/dot-notation
@@ -713,7 +713,7 @@ class ServiceGenerator {
 
   public getInterfaceTP() {
     const { components } = this.openAPIData;
-    const data =
+    let data =
       components &&
       [components.schemas].map((defines) => {
         if (!defines) {
@@ -771,8 +771,8 @@ class ServiceGenerator {
           });
         }
 
-        if (props.length > 0 && data) {
-          data.push([
+        if (props.length > 0) {
+          (data = data || []).push([
             {
               typeName: this.getTypeName({ ...operationObject, method, path: p }),
               type: 'Record<string, any>',
@@ -919,7 +919,7 @@ class ServiceGenerator {
       ?.replace(pathBasePrefix, '')
       .split('/')
       .map((str) => {
-        /** 
+        /**
          * 兼容错误命名如 /user/:id/:name
          * 因为是typeName，所以直接进行转换
          * */
